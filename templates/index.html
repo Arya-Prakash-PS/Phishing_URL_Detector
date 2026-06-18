@@ -1,1 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- SEO -->
+  <title>AuthentURL – AI-Powered Phishing URL Detector</title>
+  <meta name="description"
+        content="AuthentURL analyzes URLs in real-time using advanced cybersecurity heuristics to detect phishing, brand impersonation, and malicious links. Free, fast, and accurate." />
+  <meta name="keywords" content="phishing detector, URL scanner, cybersecurity, phishing check, safe URL, link scanner" />
+  <meta property="og:title" content="AuthentURL – Phishing URL Detector" />
+  <meta property="og:description" content="Detect phishing URLs in real time with AuthentURL's rule-based cybersecurity engine." />
+  <meta property="og:type" content="website" />
+
+  <!-- Bootstrap 5 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ NAVBAR ═══ -->
+<nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/" id="navBrand">
+      <div class="brand-icon">
+        <i class="bi bi-shield-fill-check"></i>
+      </div>
+      <span class="brand-name">Authent<span class="brand-accent">URL</span></span>
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navCollapse"
+            aria-controls="navCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="navCollapse">
+      <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <li class="nav-item">
+          <a class="nav-link" href="#how-it-works">How It Works</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#features">Features</a>
+        </li>
+        <li class="nav-item ms-2">
+          <!-- Theme Toggle -->
+          <button id="themeToggle" class="btn btn-ghost-pill" aria-label="Toggle dark/light mode">
+            <i class="bi bi-moon-stars-fill me-1"></i>
+            <span id="themeLabel">Dark</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ HERO ═══ -->
+<section class="hero-section" id="hero">
+  <!-- Animated background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Grid overlay -->
+  <div class="hero-grid"></div>
+
+  <div class="container position-relative z-1">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-10 col-xl-8">
+
+        <!-- Badge -->
+        <div class="hero-badge mb-4">
+          <i class="bi bi-shield-lock-fill me-2"></i>
+          AI-Powered Cybersecurity Tool
+        </div>
+
+        <!-- Headline -->
+        <h1 class="hero-title mb-3">
+          Detect Phishing URLs<br />
+          <span class="gradient-text">Before They Catch You</span>
+        </h1>
+
+        <p class="hero-subtitle mb-5">
+          AuthentURL uses advanced rule-based heuristics to instantly analyze
+          URLs for phishing indicators — brand impersonation, suspicious TLDs,
+          DNS failures, domain age, and more.
+        </p>
+
+        <!-- ── URL Input Card ── -->
+        <div class="scanner-card mx-auto mb-3">
+          <div class="scanner-card-inner">
+            <div class="input-group-custom">
+              <div class="input-icon">
+                <i class="bi bi-link-45deg"></i>
+              </div>
+              <input
+                type="url"
+                id="urlInput"
+                class="url-input"
+                placeholder="https://example.com"
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Enter URL to analyze"
+              />
+              <button id="analyzeBtn" class="analyze-btn" aria-label="Analyze URL">
+                <span class="btn-text">
+                  <i class="bi bi-search me-2"></i>Analyze
+                </span>
+                <span class="btn-loading d-none">
+                  <span class="spinner-border spinner-border-sm me-2"></span>Scanning…
+                </span>
+              </button>
+            </div>
+
+            <!-- Quick example buttons -->
+            <div class="quick-examples mt-3">
+              <span class="example-label">Try:</span>
+              <button class="example-chip" data-url="https://www.google.com">google.com</button>
+              <button class="example-chip" data-url="http://paypal-security-login.xyz/verify/account">paypal-phish.xyz</button>
+              <button class="example-chip" data-url="http://192.168.1.1/login">IP address</button>
+              <button class="example-chip" data-url="https://bit.ly/3xYZ123">bit.ly short URL</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error alert -->
+        <div id="errorAlert" class="alert-custom d-none" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <span id="errorMsg"></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ RESULTS ═══ -->
+<section id="resultsSection" class="results-section d-none">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-11 col-xl-10">
+
+        <!-- ── Result Header Card ── -->
+        <div id="resultCard" class="result-card mb-4">
+          <div class="result-card-header">
+            <div class="result-url-display">
+              <i class="bi bi-link-45deg me-2 opacity-50"></i>
+              <span id="resultUrlDisplay" class="font-mono"></span>
+            </div>
+          </div>
+
+          <div class="result-card-body">
+            <div class="row align-items-center gy-4">
+
+              <!-- Score Gauge -->
+              <div class="col-md-4 text-center">
+                <div class="score-gauge-wrapper">
+                  <svg class="score-gauge" viewBox="0 0 160 160" id="gaugesvg">
+                    <!-- Background circle -->
+                    <circle class="gauge-bg" cx="80" cy="80" r="65"
+                            stroke-dasharray="408" stroke-dashoffset="0"/>
+                    <!-- Progress arc -->
+                    <circle class="gauge-arc" id="gaugeArc" cx="80" cy="80" r="65"
+                            stroke-dasharray="408" stroke-dashoffset="408"/>
+                    <!-- Center text -->
+                    <text class="gauge-score-text" id="gaugeScore" x="80" y="74" text-anchor="middle">0</text>
+                    <text class="gauge-label-text" x="80" y="95" text-anchor="middle">RISK SCORE</text>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Classification + Stats -->
+              <div class="col-md-8">
+                <div id="classificationBadge" class="classification-badge mb-3"></div>
+
+                <div id="classificationText" class="classification-desc mb-4"></div>
+
+                <!-- Stats row -->
+                <div class="stats-row">
+                  <div class="stat-chip">
+                    <i class="bi bi-flag-fill me-2"></i>
+                    <span id="flagCount">0</span> Rules Triggered
+                  </div>
+                  <div class="stat-chip">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <span id="elapsedMs">—</span> ms
+                  </div>
+                </div>
+
+                <!-- Risk progress bar -->
+                <div class="mt-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <small class="bar-label-left">Safe</small>
+                    <small class="bar-label-right">Phishing</small>
+                  </div>
+                  <div class="risk-bar-track">
+                    <div id="riskBarFill" class="risk-bar-fill" style="width:0%"></div>
+                    <div id="riskBarThumb" class="risk-bar-thumb" style="left:0%"></div>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1">
+                    <small class="text-muted">0</small>
+                    <small class="text-muted">20</small>
+                    <small class="text-muted">50</small>
+                    <small class="text-muted">100+</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Two-column layout: Flags + Recommendations ── -->
+        <div class="row gy-4 mb-4">
+
+          <!-- Flags Table -->
+          <div class="col-lg-7">
+            <div class="panel-card h-100">
+              <div class="panel-card-header">
+                <i class="bi bi-shield-exclamation me-2"></i>
+                Triggered Detection Rules
+                <span id="flagBadge" class="badge-pill ms-2">0</span>
+              </div>
+              <div class="panel-card-body">
+                <!-- Trusted domain message -->
+                <div id="trustedMsg" class="trusted-message d-none">
+                  <i class="bi bi-patch-check-fill me-2"></i>
+                  This is a well-known trusted domain — no rules were triggered.
+                </div>
+
+                <!-- No flags -->
+                <div id="noFlags" class="no-flags-msg d-none">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  No suspicious patterns detected.
+                </div>
+
+                <!-- Flags table -->
+                <div id="flagsTableWrapper" class="table-responsive d-none">
+                  <table class="flags-table" id="flagsTable">
+                    <thead>
+                      <tr>
+                        <th>Rule</th>
+                        <th>Severity</th>
+                        <th>Score</th>
+                        <th>Detail</th>
+                      </tr>
+                    </thead>
+                    <tbody id="flagsTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommendations -->
+          <div class="col-lg-5">
+            <div class="panel-card h-100">
+              <div class="panel-card-header">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                Security Recommendations
+              </div>
+              <div class="panel-card-body">
+                <ul id="recommendationsList" class="recommendations-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Scan Again Button ── -->
+        <div class="text-center mb-5">
+          <button id="scanAgainBtn" class="btn-scan-again">
+            <i class="bi bi-arrow-clockwise me-2"></i>Scan Another URL
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════════════ HOW IT WORKS ═══ -->
+<section class="how-section" id="how-it-works">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">Detection Engine</div>
+      <h2 class="section-title">How AuthentURL Works</h2>
+      <p class="section-subtitle">
+        Every URL is scored against 15+ cybersecurity checks, each contributing
+        to a final risk score that determines the classification.
+      </p>
+    </div>
+
+    <div class="row gy-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-blue">
+            <i class="bi bi-link-45deg"></i>
+          </div>
+          <h3 class="how-title">URL Structure</h3>
+          <p class="how-desc">Inspects length, dots, subdomains, IP addresses, suspicious symbols, and encoding obfuscation.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-purple">
+            <i class="bi bi-globe"></i>
+          </div>
+          <h3 class="how-title">Domain Analysis</h3>
+          <p class="how-desc">Detects hyphens, brand impersonation of 20+ major brands, suspicious TLDs, and URL shorteners.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-green">
+            <i class="bi bi-lock-fill"></i>
+          </div>
+          <h3 class="how-title">Security Checks</h3>
+          <p class="how-desc">Verifies HTTPS, validates SSL certificates, checks DNS resolution, and tests domain reachability.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-orange">
+            <i class="bi bi-calendar3"></i>
+          </div>
+          <h3 class="how-title">Domain Age (WHOIS)</h3>
+          <p class="how-desc">Looks up registration date via WHOIS. Domains under 30 days old are flagged as high risk.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-red">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <h3 class="how-title">Keyword Detection</h3>
+          <p class="how-desc">Scans for 22 phishing-related keywords like "login", "verify", "password", "wallet" in the URL path.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="how-card">
+          <div class="how-icon how-icon-cyan">
+            <i class="bi bi-bar-chart-fill"></i>
+          </div>
+          <h3 class="how-title">Risk Scoring</h3>
+          <p class="how-desc">Each check contributes a weighted score. 0–20 = Safe, 21–50 = Suspicious, 51+ = Phishing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════════════ FEATURES ═══ -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">Why AuthentURL</div>
+      <h2 class="section-title">Built for Cybersecurity</h2>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-item">
+        <i class="bi bi-lightning-charge-fill feature-icon"></i>
+        <div>
+          <strong>Real-Time Analysis</strong>
+          <p>Results in seconds using optimised rule execution.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-shield-check feature-icon"></i>
+        <div>
+          <strong>15+ Detection Rules</strong>
+          <p>Comprehensive heuristics covering all major phishing vectors.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-moon-stars-fill feature-icon"></i>
+        <div>
+          <strong>Dark &amp; Light Mode</strong>
+          <p>Beautiful cybersecurity-themed interface in both modes.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-phone feature-icon"></i>
+        <div>
+          <strong>Fully Responsive</strong>
+          <p>Works perfectly on desktop, tablet, and mobile devices.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-eye feature-icon"></i>
+        <div>
+          <strong>Transparent Decisions</strong>
+          <p>Every flagged rule is explained in plain English.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <i class="bi bi-database-check feature-icon"></i>
+        <div>
+          <strong>WHOIS &amp; DNS Verification</strong>
+          <p>Live network checks for domain age and reachability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════════════ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="bi bi-shield-fill-check me-2"></i>
+        Authent<span class="brand-accent">URL</span>
+      </div>
+      <p class="footer-tagline">
+        Protecting users from phishing attacks with intelligent URL analysis.
+      </p>
+      <p class="footer-disclaimer">
+        ⚠️ AuthentURL is a heuristic tool. Results are informational only and do not constitute
+        professional security advice. Always use multiple sources to verify suspicious URLs.
+      </p>
+      <div class="footer-bottom">
+        <span>© 2025 AuthentURL</span>
+        <span class="footer-dot">•</span>
+        <span>Rule-Based Cybersecurity Engine</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmQAAVFyMEFPze1L0vfSBCDp7LA"
+  crossorigin="anonymous">
+</script>
+
+<!-- Custom JS -->
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>
